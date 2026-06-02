@@ -1,5 +1,15 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "src/**/*", "*.mjs", "*.ts"],
-  "exclude": ["dist", "node_modules", "_local"]
+	"extends": "astro/tsconfigs/strict",
+	"include": [
+		".astro/types.d.ts",
+		"src/**/*",
+		"*.mjs",
+		"*.ts",
+		"./worker-configuration.d.ts"
+	],
+	"exclude": [
+		"dist",
+		"node_modules",
+		"_local"
+	]
 }

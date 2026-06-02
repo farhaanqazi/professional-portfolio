@@ -24,3 +24,9 @@ Thumbs.db
 _local/
 _diag/
 plan.md
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
