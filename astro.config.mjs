@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
+import cloudflare from "@astrojs/cloudflare";
 // NOTE: @astrojs/sitemap is a v2 item (see plan.md). Re-add it with `integrations: [tailwind(), sitemap()]`
 // once you have a stable domain — and re-enable the <link rel="sitemap"> in BaseLayout + robots.txt line.
 
@@ -8,11 +9,16 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   site: 'https://professional-portfolio.qazifarhaan.workers.dev',
   integrations: [tailwind()],
+
   build: {
     inlineStylesheets: 'auto',
   },
+
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',
   },
+
+  output: "hybrid",
+  adapter: cloudflare()
 });
