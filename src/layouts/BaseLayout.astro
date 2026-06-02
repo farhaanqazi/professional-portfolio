@@ -87,28 +87,56 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href;
     <Footer />
     <Interactions />
 
-    <script is:inline>
-      // Scroll-reveal: elements with .reveal fade/slide in once. Progressive enhancement —
-      // without JS, .reveal stays fully visible (the `js` class gates the hidden state).
-      (() => {
+    <script>
+      // ── GSAP-powered scroll reveal ──────────────────────────────────────────
+      // .reveal elements rise + fade in, batched so items entering together
+      // stagger as a group (premium "choreographed" feel vs. one-by-one).
+      // Dynamic import + try/catch: if the GSAP chunk ever fails to load, we
+      // just show everything — content is never left stuck hidden.
+      (async () => {
+        const revealAll = () =>
+          document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const els = document.querySelectorAll('.reveal');
-        if (reduce || !('IntersectionObserver' in window)) {
-          els.forEach((el) => el.classList.add('is-visible'));
+        if (reduce) {
+          revealAll();
           return;
         }
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                io.unobserve(entry.target);
-              }
-            });
-          },
-          { rootMargin: '0px 0px -10% 0px', threshold: 0.05 }
-        );
-        els.forEach((el) => io.observe(el));
+
+        try {
+          const { gsap } = await import('gsap');
+          const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+          gsap.registerPlugin(ScrollTrigger);
+
+          const els = gsap.utils.toArray('.reveal');
+          if (!els.length) return;
+
+          gsap.set(els, { opacity: 0, y: 34, scale: 0.975 });
+
+          ScrollTrigger.batch(els, {
+            start: 'top 90%',
+            once: true,
+            onEnter: (batch) =>
+              gsap.to(batch, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.85,
+                ease: 'power3.out',
+                stagger: 0.09,
+                overwrite: true,
+                onComplete: () =>
+                  batch.forEach((el) => el.classList.add('is-visible')),
+              }),
+          });
+
+          // Re-measure once web fonts settle so trigger points stay accurate.
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => ScrollTrigger.refresh());
+          }
+        } catch (err) {
+          revealAll();
+        }
       })();
     </script>
   </body>
