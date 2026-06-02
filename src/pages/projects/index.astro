@@ -24,7 +24,13 @@ const projects = (await getCollection('projects')).sort((a, b) => {
     </p>
 
     <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {projects.map((project) => <ProjectCard project={project} />)}
+      {
+        projects.map((project, i) => (
+          <div class="reveal" style={`--reveal-delay:${Math.min(i, 8) * 60}ms`}>
+            <ProjectCard project={project} />
+          </div>
+        ))
+      }
     </div>
   </section>
 </BaseLayout>

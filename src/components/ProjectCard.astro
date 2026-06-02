@@ -16,14 +16,23 @@ const statusLabel: Record<typeof data.status, string> = {
 };
 
 const firstMetric = data.metrics?.[0];
+const hasLive = Boolean(data.demoUrl);
 ---
 
 <article
-  class="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 ease-smooth hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-accent-dark/40"
+  class="group relative h-full overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent/10 dark:border-white/10 dark:bg-white/[0.03] dark:hover:shadow-accent-dark/20"
 >
-  <a href={`/projects/${slug}`} class="flex h-full flex-col focus-visible:ring-0">
-    <!-- Thumbnail: explicit aspect ratio prevents layout shift (CLS 0). -->
-    <div class="aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+  <!-- gradient glow ring on hover -->
+  <div
+    class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    style="background:radial-gradient(60% 40% at 50% 0%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 70%)"
+    aria-hidden="true"
+  >
+  </div>
+
+  <a href={`/projects/${slug}`} class="relative flex h-full flex-col focus-visible:ring-0">
+    <!-- Thumbnail -->
+    <div class="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-white/5">
       <img
         src={data.thumbnail}
         alt={`${data.title} thumbnail`}
@@ -31,15 +40,22 @@ const firstMetric = data.metrics?.[0];
         height="360"
         loading="lazy"
         decoding="async"
-        class="h-full w-full object-cover transition-transform duration-300 ease-smooth group-hover:scale-[1.02]"
+        class="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
       />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+      {
+        hasLive && (
+          <span class="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-2 py-0.5 text-[0.65rem] font-semibold text-white backdrop-blur">
+            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+            Live
+          </span>
+        )
+      }
     </div>
 
     <div class="flex flex-1 flex-col p-5">
       <div class="mb-2 flex items-center gap-2">
-        <span
-          class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[0.7rem] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-400"
-        >
+        <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[0.7rem] font-medium text-slate-600 dark:bg-white/10 dark:text-slate-300">
           {statusLabel[data.status]}
         </span>
         {
@@ -51,9 +67,7 @@ const firstMetric = data.metrics?.[0];
         }
       </div>
 
-      <h3
-        class="text-lg font-semibold tracking-tight text-slate-900 transition-colors group-hover:text-accent dark:text-slate-100 dark:group-hover:text-accent-dark"
-      >
+      <h3 class="text-lg font-semibold tracking-tight text-slate-900 transition-colors group-hover:text-accent dark:text-slate-100 dark:group-hover:text-accent-dark">
         {data.title}
       </h3>
       <p class="mt-1.5 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
@@ -63,18 +77,16 @@ const firstMetric = data.metrics?.[0];
       <div class="mt-4 flex flex-wrap gap-1.5">
         {
           data.stack.slice(0, 4).map((tech) => (
-            <span class="rounded border border-slate-200 px-1.5 py-0.5 text-[0.7rem] text-slate-500 dark:border-slate-700 dark:text-slate-400">
+            <span class="rounded-md border border-slate-200 px-1.5 py-0.5 text-[0.7rem] text-slate-500 dark:border-white/10 dark:text-slate-400">
               {tech}
             </span>
           ))
         }
       </div>
 
-      <span
-        class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent dark:text-accent-dark"
-      >
+      <span class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent dark:text-accent-dark">
         Read case study
-        <Icon name="arrow-right" class="h-4 w-4 transition-transform duration-200 ease-smooth group-hover:translate-x-0.5" />
+        <Icon name="arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
       </span>
     </div>
   </a>

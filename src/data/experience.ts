@@ -16,9 +16,10 @@ export const roles: Role[] = [
     location: 'Leeds, UK',
     period: 'Jun 2025 – Dec 2025',
     highlights: [
-      'Prepared periodic performance reports for senior leadership — monitoring data-accuracy KPIs, audit readiness, and operational health across the Adult Diabetes Service.',
-      'Extracted and summarised data from multiple clinical sources for ad-hoc reporting.',
-      'Built compliance-grade Excel and Power BI dashboards tracking activity, wait times, and resource allocation.',
+      'Owned periodic performance reporting for the Adult Diabetes Service — monitoring data-accuracy KPIs, wait times, and resource allocation for senior NHS leadership.',
+      'Built Power BI and Excel dashboards that replaced manual reporting, cutting turnaround time and giving the C-suite executive-ready visuals each cycle.',
+      'Extracted and synthesised data across multiple clinical systems; delivered ad-hoc analysis that flagged early-intervention signals missed in existing reports.',
+      'Led UAT-style validation and stakeholder training for two new datasets, reducing onboarding errors and accelerating adoption.',
     ],
   },
   {
@@ -27,8 +28,8 @@ export const roles: Role[] = [
     location: 'Edinburgh, UK',
     period: 'Sep 2024 – Feb 2025',
     highlights: [
-      'Redesigned document and reporting workflows, eliminating errors in a high-volume environment.',
-      'Coordinated cross-functional teams to deliver zero-error outputs under deadline pressure.',
+      'Redesigned document and reporting workflows across a high-volume production environment — eliminating recurring errors and achieving consistent zero-defect output under deadline pressure.',
+      'Coordinated cross-functional resolution of data and process issues; enforced version-control standards that prevented downstream reporting failures.',
     ],
   },
   {
@@ -37,8 +38,8 @@ export const roles: Role[] = [
     location: 'Edinburgh, UK',
     period: 'May 2022 – Sep 2024',
     highlights: [
-      'Monitored and analysed operational metrics, producing management reports and executive briefings.',
-      'Owned end-to-end reporting cycles, including daily reconciliation.',
+      'Produced daily reconciliation, performance summaries, and executive briefings — maintaining accuracy across all management reporting outputs.',
+      'Identified and implemented process automation that cut manual effort in routine reporting tasks.',
     ],
   },
   {
@@ -47,8 +48,9 @@ export const roles: Role[] = [
     location: 'Delhi, India',
     period: 'Mar 2017 – Jan 2022',
     highlights: [
-      'Prepared daily, weekly, and monthly KPI reports summarising client transaction data, portfolio performance, and churn indicators.',
-      'Built Excel-based financial reporting tools delivering insights to branch and regional leadership.',
+      'Prepared daily, weekly, and monthly KPI reports for senior stakeholders — tracking portfolio performance, revenue trends, churn indicators, and account health across the branch.',
+      'Built Excel-based financial reporting tools that surfaced risk signals and performance patterns, directly informing account strategy and expansion decisions.',
+      'Maintained audit-ready, regulatory-compliant reporting outputs through multi-stakeholder sign-off processes across five years.',
     ],
   },
   {

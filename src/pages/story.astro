@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// The opening line is typed out on landing; the rest of the first paragraph follows it.
+const openingTyped = 'Growing up in Kashmir, my world was defined by its limits as much as by its landscape.';
+const openingRest =
+  ' School meant memorising facts under pressure, not asking questions about them. There was no science fair, no debate club, no moment where someone sat across from me and said, “you could do something with this.” Mathematics was the one exception — not because I was told to value it, but because it was the only place where I could see that I was genuinely good at something without needing to be told so.';
+
+// Date aligned to the CV (the timeline source of truth): banking → MSc transition is 2022.
+const paras = [
+  'My BEng in Civil Engineering in 2012 was a credential, not a calling. The years immediately after were spent trying to find professional footing — eventually landing a role in construction in 2014, which ended in 2015. After that I went back to Kashmir, and this is where the story becomes difficult to explain to someone who has not felt that particular pull. There is an attachment to that place that does not respond to career logic. I wanted to build a professional life within a region where the private sector is almost entirely absent and stable employment runs almost exclusively through government examinations. So I prepared for them, sat them, and in March 2017 I joined J&K Bank.',
+  'I spent five years there. I worked with financial data — risk signals, transactional patterns, compliance reporting — and I noticed, fairly early, that the gap between what the data actually contained and what the organisation believed it was telling them was significant and consequential. I started building things to close that gap. Nothing dramatic. Cleaner models, more honest reports, analyses that asked a slightly different question than the one I had been given. That habit of looking at the existing tool and finding it insufficient — that started there, in a government bank in Kashmir, long before I had any language for it.',
+  'In 2022 I made a decision that felt enormous at the time: I left banking and enrolled in an MSc in Data Science at Heriot-Watt University in Edinburgh. The move was not just geographical. It was the first time I deliberately chose difficulty over stability, the first time I bet on the instinct rather than suppressing it.',
+  'What happened at Heriot-Watt I was not prepared for. Partway through the programme, before I had even reached my dissertation, my supervisor offered me a PhD. I was the first student he had made that offer to. I said no. Not because I had somewhere better to be, and not because I was uninterested, but because I genuinely did not understand what a PhD was — what it asked of you, what kind of thinking it required, whether I was the kind of person it was built for. I walked away from the offer without understanding what I was walking away from.',
+  'The dissertation showed me. I was working on a machine learning approach to Parkinson’s disease diagnosis, and something happened during those months that had not happened to me before in any academic or professional setting. I was not completing tasks. I was thinking inside a problem — running into walls, finding my way around them, changing direction when the data said to, building something that had not existed before I started. I did not want to stop. When I submitted, the report was selected by the school as an exemplar dissertation and placed on the university portal for future students. Peers came to me during their own dissertations — not because I invited them, but because the work had earned it. My professor’s earlier offer, in retrospect, began to make a different kind of sense.',
+  'After graduating in December 2023 I remained in the UK, working across healthcare analytics and operational data roles — the NHS, and briefly other organisations. The work was useful and I learned from it. But the feeling that had started during the dissertation did not leave. It sharpened, with each role — each time I found the existing tools inadequate and built something closer to what was needed. The audit system. The clinical pipeline. The dashboard engine. None of these were asked for. They were the product of a consistent inability to leave a visible gap unfilled.',
+  'I am 36. I understand what that number looks like on an application, and I would rather address it plainly than pretend it is not there. The time between my undergraduate degree and now is not a story of delay. It is a story of someone who grew up where the concept of research as a vocation did not exist, who spent years developing domain depth and technical capability in applied settings, and who had the central insight handed to him by a professor who saw it before he did. I rejected that offer out of ignorance. I cannot go back and accept it. What I can do is arrive now with everything I did not have then: the domain knowledge, the technical grounding, the demonstrated research instinct, and finally, the self-knowledge to understand what I am asking for and why.',
+  'I am not applying for a PhD because it is the next logical step in a career plan. I am applying because I have been doing the thinking for years, in the only forms that were available to me, and I want to do it properly.',
+];
+
+// Strong lines pulled out as quotes, inserted after these paragraph indices.
+const pullQuotes: Record<number, string> = {
+  1: 'I was not completing tasks. I was thinking inside a problem.',
+  5: 'The product of a consistent inability to leave a visible gap unfilled.',
+};
+---
+
+<BaseLayout
+  title="Story"
+  description="The long way here — from Kashmir, through banking and a master's, to the problem I couldn't put down."
+>
+  <article class="container-content py-16 sm:py-24">
+    <header class="mx-auto max-w-prose text-center">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-accent dark:text-accent-dark">
+        Personal
+      </p>
+      <h1 class="mt-4 font-serif text-4xl font-semibold leading-tight tracking-tight text-slate-900 dark:text-slate-50 sm:text-5xl">
+        The long way here
+      </h1>
+      <div class="mx-auto mt-6 h-px w-16 bg-gradient-to-r from-transparent via-accent to-transparent dark:via-accent-dark"></div>
+    </header>
+
+    <div class="mx-auto mt-12 max-w-prose font-serif text-[1.15rem] leading-[1.85] text-slate-700 dark:text-slate-300">
+      <!-- Opening paragraph with typed first line -->
+      <p class="text-[1.3rem] leading-[1.7] text-slate-900 dark:text-slate-100">
+        <span id="typed" data-text={openingTyped} class="typed"></span><span id="cursor" class="typed-cursor" aria-hidden="true"></span><span id="opening-rest" class="opening-rest">{openingRest}</span>
+      </p>
+
+      {
+        paras.map((p, i) => (
+          <>
+            <p class="reveal mt-7">{p}</p>
+            {pullQuotes[i] && (
+              <blockquote class="reveal my-10 border-l-2 border-accent/60 pl-6 text-[1.35rem] font-medium italic leading-snug text-slate-900 dark:border-accent-dark/60 dark:text-slate-100">
+                {pullQuotes[i]}
+              </blockquote>
+            )}
+          </>
+        ))
+      }
+
+      <div class="reveal mt-14 border-t border-slate-200 pt-8 text-center dark:border-white/10">
+        <a href="/projects" class="btn-ghost">The work this produced &rarr;</a>
+      </div>
+    </div>
+  </article>
+
+  <style>
+    .typed-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      background: var(--accent);
+      animation: blink 1s step-end infinite;
+    }
+    .opening-rest { opacity: 0; transition: opacity 1s ease; }
+    .opening-rest.show { opacity: 1; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .typed-cursor { display: none; }
+      .opening-rest { opacity: 1; }
+    }
+  </style>
+
+  <script is:inline>
+    (() => {
+      const el = document.getElementById('typed');
+      const cursor = document.getElementById('cursor');
+      const rest = document.getElementById('opening-rest');
+      if (!el) return;
+      const text = el.getAttribute('data-text') || '';
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduce) {
+        el.textContent = text;
+        if (rest) rest.classList.add('show');
+        if (cursor) cursor.remove();
+        return;
+      }
+
+      let i = 0;
+      const tick = () => {
+        el.textContent = text.slice(0, i);
+        i++;
+        if (i <= text.length) {
+          setTimeout(tick, 28 + Math.random() * 40);
+        } else {
+          if (rest) rest.classList.add('show');
+          if (cursor) setTimeout(() => cursor.remove(), 1200);
+        }
+      };
+      setTimeout(tick, 400);
+    })();
+  </script>
+</BaseLayout>

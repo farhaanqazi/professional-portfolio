@@ -6,6 +6,7 @@ const nav = [
   { href: '/', label: 'Home' },
   { href: '/projects', label: 'Projects' },
   { href: '/experience', label: 'Experience' },
+  { href: '/story', label: 'Story' },
   { href: '/about', label: 'About' },
 ];
 
@@ -15,14 +16,17 @@ const isActive = (href: string) => (href === '/' ? current === '/' : current.sta
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-md dark:border-slate-800/70 dark:bg-[#0A0A0A]/80"
+  class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-[#070711]/70"
 >
   <nav class="container-content flex h-14 items-center justify-between" aria-label="Primary">
     <a
       href="/"
-      class="text-sm font-bold tracking-tight text-slate-900 transition-colors hover:text-accent dark:text-slate-100 dark:hover:text-accent-dark"
+      class="group flex items-center gap-2 text-sm font-bold tracking-tight text-slate-900 transition-colors dark:text-slate-100"
     >
-      {site.name}
+      <span class="grid h-7 w-7 place-items-center rounded-lg text-xs font-bold text-white" style="background-image:linear-gradient(135deg,var(--accent),var(--accent-2))">
+        {site.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
+      </span>
+      <span class="transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{site.name}</span>
     </a>
 
     <div class="flex items-center gap-1 sm:gap-2">
@@ -46,7 +50,7 @@ const isActive = (href: string) => (href === '/' ? current === '/' : current.sta
           ))
         }
       </ul>
-      <ResumeLink variant="outline" class="ml-1 hidden px-3 py-1.5 sm:inline-flex" />
+      <ResumeLink variant="outline" class="ml-1 hidden !px-3.5 !py-1.5 !text-xs sm:inline-flex" />
     </div>
   </nav>
 </header>

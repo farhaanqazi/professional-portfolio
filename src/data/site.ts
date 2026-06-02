@@ -16,7 +16,7 @@ export const site = {
     'MSc Data Science. I build executive-ready dashboards and automate the reporting cycle end to end — extracting from multiple sources, tracking KPIs, and turning ad-hoc requests into repeatable, audit-ready outputs.',
 
   // Used for canonical URLs and OG tags. MUST match astro.config.mjs `site`.
-  url: 'https://your-domain.com', // PLACEHOLDER — set your real domain
+  url: 'https://professional-portfolio.qazifarhaan.workers.dev',
 
   // Contact paths.
   email: 'qazifarhaan@gmail.com',

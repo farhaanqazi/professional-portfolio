@@ -27,6 +27,9 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href;
 <!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
@@ -54,6 +57,7 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href;
     <meta name="twitter:image" content={ogImageUrl} />
   </head>
   <body class="flex min-h-screen flex-col">
+    <div class="bg-decor" aria-hidden="true"></div>
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-[60] focus:rounded-md focus:bg-accent focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
@@ -65,5 +69,30 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href;
       <slot />
     </main>
     <Footer />
+
+    <script is:inline>
+      // Scroll-reveal: elements with .reveal fade/slide in once. Progressive enhancement —
+      // without JS, .reveal stays fully visible (the `js` class gates the hidden state).
+      (() => {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const els = document.querySelectorAll('.reveal');
+        if (reduce || !('IntersectionObserver' in window)) {
+          els.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.05 }
+        );
+        els.forEach((el) => io.observe(el));
+      })();
+    </script>
   </body>
 </html>
