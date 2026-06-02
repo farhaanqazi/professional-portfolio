@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactLinks from '../components/ContactLinks.astro';
 import ResumeLink from '../components/ResumeLink.astro';
 import Icon from '../components/Icon.astro';
+import IntroOverlay from '../components/IntroOverlay.astro';
 import { site } from '../data/site';
 
 // Only a count — individual projects live on their dedicated /projects page.
@@ -40,6 +41,7 @@ const badge =
 ---
 
 <BaseLayout>
+  <IntroOverlay />
   <section class="container-content pt-10 pb-14 sm:pt-14">
     <div class="bento grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:[grid-auto-rows:minmax(10.5rem,auto)]">
       <!-- ── Intro / identity (anchor tile, restrained) ──────────────── -->
