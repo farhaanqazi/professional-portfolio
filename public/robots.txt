@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Re-add a Sitemap line here once @astrojs/sitemap is enabled (v2 — see plan.md):
+# Sitemap: https://your-domain.com/sitemap-index.xml

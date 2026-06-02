@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactLinks from '../components/ContactLinks.astro';
+import ResumeLink from '../components/ResumeLink.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="About"
+  description={`About ${site.name} — background, focus, and how to get in touch.`}
+>
+  <section class="container-content py-12 sm:py-16">
+    <SectionHeading eyebrow="About" title={site.name} />
+
+    <div class="prose-reading mt-8">
+      <!-- Sourced from your GitHub profile README. Edit freely — this is your voice. -->
+      <p>
+        I'm a results-oriented analyst with <strong>8+ years of cross-industry experience</strong>
+        preparing daily, weekly, and periodic business performance reports for senior stakeholders.
+        Advanced Excel and Power BI practitioner with a Master's in Data Science — bringing rare
+        automation capability (Python, SQL, CI/CD pipelines) to traditional reporting and analysis.
+      </p>
+      <p>
+        I have a proven track record of extracting data from multiple sources, building
+        executive-ready dashboards, and delivering ad-hoc analysis under tight deadlines. Financial
+        domain expertise from five years in banking; EMEA reporting exposure from NHS roles in the UK.
+        A self-starter comfortable owning end-to-end reporting cycles independently.
+      </p>
+
+      <h2>Core competencies</h2>
+      <ul>
+        <li>Daily / weekly / periodic reporting &amp; KPI tracking for senior leadership</li>
+        <li>Power BI dashboard development (DAX, Power Query) and Advanced Excel</li>
+        <li>SQL data extraction &amp; summarisation; Python analysis (Pandas, NumPy)</li>
+        <li>Report automation (Python, GitHub Actions, AWS) — the differentiator</li>
+        <li>Data governance, compliance reporting, and audit readiness</li>
+      </ul>
+
+      <h2>Background</h2>
+      <ul>
+        <li><strong>MSc Data Science</strong> — Heriot-Watt University, Edinburgh (2022–2023)</li>
+        <li>Financial KPIs &amp; reporting — 5 years in banking (J&amp;K Bank)</li>
+        <li>Healthcare operational metrics — NHS / EMEA (Leeds Teaching Hospitals NHS Trust)</li>
+      </ul>
+    </div>
+
+    <div class="mt-10 flex flex-wrap items-center gap-4">
+      <ResumeLink variant="solid" />
+      <ContactLinks />
+    </div>
+  </section>
+</BaseLayout>

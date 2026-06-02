@@ -1,0 +1,168 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const { data } = project;
+---
+
+<BaseLayout title={data.title} description={data.summary}>
+  <article class="container-content py-12 sm:py-16">
+    <a
+      href="/projects"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-accent dark:text-slate-400 dark:hover:text-accent-dark"
+    >
+      <Icon name="arrow-right" class="h-4 w-4 rotate-180" />
+      All projects
+    </a>
+
+    <header class="mt-6 max-w-prose">
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <span
+          class="rounded-full bg-accent/10 px-2.5 py-0.5 font-medium uppercase tracking-wide text-accent dark:bg-accent-dark/10 dark:text-accent-dark"
+        >
+          {data.status}
+        </span>
+        <span class="text-slate-500 dark:text-slate-400">{data.role}</span>
+      </div>
+      <h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+        {data.title}
+      </h1>
+      <p class="mt-3 text-lg leading-relaxed text-slate-600 dark:text-slate-400">{data.summary}</p>
+
+      <div class="mt-5 flex flex-wrap gap-2">
+        {
+          data.stack.map((tech) => (
+            <span class="rounded border border-slate-200 px-2 py-0.5 text-xs text-slate-600 dark:border-slate-700 dark:text-slate-400">
+              {tech}
+            </span>
+          ))
+        }
+      </div>
+
+      {
+        (data.repoUrl || data.demoUrl) && (
+          <div class="mt-5 flex flex-wrap gap-3">
+            {data.repoUrl && (
+              <a
+                href={data.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-800 transition-colors hover:border-accent hover:text-accent dark:border-slate-700 dark:text-slate-200 dark:hover:border-accent-dark dark:hover:text-accent-dark"
+              >
+                <Icon name="github" class="h-4 w-4" />
+                Repository
+              </a>
+            )}
+            {data.demoUrl && (
+              <a
+                href={data.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-800 transition-colors hover:border-accent hover:text-accent dark:border-slate-700 dark:text-slate-200 dark:hover:border-accent-dark dark:hover:text-accent-dark"
+              >
+                <Icon name="external" class="h-4 w-4" />
+                Live demo
+              </a>
+            )}
+          </div>
+        )
+      }
+    </header>
+
+    {/* Problem / Outcome at-a-glance */}
+    <div class="mt-10 grid max-w-prose gap-4 sm:grid-cols-2">
+      <div class="rounded-lg border border-slate-200 p-4 dark:border-slate-800">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          Problem
+        </p>
+        <p class="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">{data.problem}</p>
+      </div>
+      <div class="rounded-lg border border-slate-200 p-4 dark:border-slate-800">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          Outcome
+        </p>
+        <p class="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">{data.outcome}</p>
+      </div>
+    </div>
+
+    {
+      data.metrics && data.metrics.length > 0 && (
+        <div class="mt-4 grid max-w-prose gap-4 sm:grid-cols-3">
+          {data.metrics.map((m) => (
+            <div class="rounded-lg border border-slate-200 p-4 dark:border-slate-800">
+              <p class="text-xl font-bold text-accent dark:text-accent-dark">{m.value}</p>
+              <p class="text-sm text-slate-700 dark:text-slate-300">{m.label}</p>
+              <p class="mt-1 text-[0.7rem] text-slate-400 dark:text-slate-500">Source: {m.source}</p>
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      data.architectureDiagram && (
+        <figure class="mt-10 max-w-prose">
+          <img
+            src={data.architectureDiagram}
+            alt={`${data.title} system architecture diagram`}
+            class="w-full rounded-lg border border-slate-200 dark:border-slate-800"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption class="mt-2 text-center text-xs text-slate-400">System architecture</figcaption>
+        </figure>
+      )
+    }
+
+    {/* Markdown body */}
+    <div class="prose-reading mt-10">
+      <slot />
+    </div>
+
+    {/* Evidence — the proof that backs every claim above */}
+    <section class="mt-12 max-w-prose rounded-lg border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/40">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300">
+        Evidence
+      </h2>
+      <ul class="mt-3 space-y-2">
+        {
+          data.evidence.map((item) => {
+            const isUrl = /^https?:\/\//.test(item);
+            return (
+              <li class="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
+                <Icon name="arrow-up-right" class="mt-0.5 h-4 w-4 flex-none text-accent dark:text-accent-dark" />
+                {isUrl ? (
+                  <a href={item} target="_blank" rel="noopener noreferrer" class="link-accent break-all">
+                    {item}
+                  </a>
+                ) : (
+                  <span>{item}</span>
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
+
+    {
+      data.lessons && data.lessons.length > 0 && (
+        <section class="mt-8 max-w-prose">
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300">
+            Lessons
+          </h2>
+          <ul class="prose-reading mt-2">
+            {data.lessons.map((lesson) => (
+              <li>{lesson}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>

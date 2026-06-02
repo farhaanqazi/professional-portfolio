@@ -1,0 +1,18 @@
+---
+import { site } from '../data/site';
+import ContactLinks from './ContactLinks.astro';
+
+const year = 2026; // build-time constant; bump as needed (Date is not used to keep builds reproducible).
+---
+
+<footer class="mt-20 border-t border-slate-200 dark:border-slate-800">
+  <div class="container-content flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">{site.name}</p>
+      <p class="mt-1 text-sm text-slate-500 dark:text-slate-500">
+        &copy; {year} &middot; Built with Astro
+      </p>
+    </div>
+    <ContactLinks />
+  </div>
+</footer>

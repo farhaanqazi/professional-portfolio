@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-white text-slate-800 antialiased;
+    @apply dark:bg-[#0A0A0A] dark:text-slate-200;
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  /* High-visibility keyboard focus (WCAG). */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-white;
+    @apply dark:ring-accent-dark dark:ring-offset-[#0A0A0A];
+    border-radius: 2px;
+  }
+
+  ::selection {
+    @apply bg-accent/20 dark:bg-accent-dark/30;
+  }
+}
+
+@layer components {
+  .container-content {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+  }
+
+  .link-accent {
+    @apply text-accent decoration-accent/40 underline-offset-4 transition-colors duration-200 ease-smooth hover:decoration-accent;
+    @apply dark:text-accent-dark dark:decoration-accent-dark/40 dark:hover:decoration-accent-dark;
+  }
+
+  /* Long-form reading typography for case studies / about. */
+  .prose-reading {
+    @apply max-w-prose text-[1.0625rem] leading-relaxed text-slate-700 dark:text-slate-300;
+  }
+  .prose-reading h2 {
+    @apply mt-10 mb-3 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100;
+  }
+  .prose-reading h3 {
+    @apply mt-8 mb-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100;
+  }
+  .prose-reading p {
+    @apply my-4;
+  }
+  .prose-reading ul {
+    @apply my-4 list-disc space-y-1.5 pl-5 marker:text-accent dark:marker:text-accent-dark;
+  }
+  .prose-reading a {
+    @apply link-accent;
+  }
+  .prose-reading code {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-[0.875em] dark:bg-slate-800;
+  }
+  .prose-reading blockquote {
+    @apply my-5 border-l-2 border-accent/50 pl-4 italic text-slate-600 dark:border-accent-dark/50 dark:text-slate-400;
+  }
+}

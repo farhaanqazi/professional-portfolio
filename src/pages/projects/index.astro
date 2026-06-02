@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => {
+  // Featured first, then by explicit order, then title.
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+  return a.data.title.localeCompare(b.data.title);
+});
+---
+
+<BaseLayout
+  title="Projects"
+  description="Evidence-backed engineering case studies — the problem, the decisions, and the proof."
+>
+  <section class="container-content py-12 sm:py-16">
+    <SectionHeading eyebrow="Case studies" title="Projects" />
+    <p class="mt-3 max-w-prose text-slate-600 dark:text-slate-400">
+      Each case study covers the problem, the role I played, the key technical decisions and
+      trade-offs, and the evidence behind every claim.
+    </p>
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+</BaseLayout>

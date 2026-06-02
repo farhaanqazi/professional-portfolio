@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ResumeLink from '../components/ResumeLink.astro';
+import { roles, education } from '../data/experience';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="Experience"
+  description={`${site.name} — 8+ years across banking, NHS/EMEA healthcare, and operations reporting.`}
+>
+  <section class="container-content py-12 sm:py-16">
+    <SectionHeading eyebrow="Career" title="Experience" />
+    <p class="mt-3 max-w-prose text-slate-600 dark:text-slate-400">
+      8+ years of cross-industry experience preparing performance reports for senior stakeholders —
+      across banking, healthcare (NHS/EMEA), and operations.
+    </p>
+
+    <!-- Timeline -->
+    <ol class="mt-10 max-w-prose space-y-8 border-l border-slate-200 pl-6 dark:border-slate-800">
+      {
+        roles.map((role) => (
+          <li class="relative">
+            <span class="absolute -left-[1.69rem] top-1.5 h-3 w-3 rounded-full border-2 border-accent bg-white dark:border-accent-dark dark:bg-[#0A0A0A]" />
+            <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+              <h2 class="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                {role.title}
+              </h2>
+              <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{role.period}</span>
+            </div>
+            <p class="text-sm font-medium text-accent dark:text-accent-dark">
+              {role.org} <span class="text-slate-400 dark:text-slate-500">· {role.location}</span>
+            </p>
+            <ul class="mt-2 space-y-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+              {role.highlights.map((h) => (
+                <li class="flex gap-2">
+                  <span class="mt-2 h-1 w-1 flex-none rounded-full bg-slate-400 dark:bg-slate-600" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ol>
+
+    <!-- Education -->
+    <div class="mt-14 max-w-prose">
+      <h2 class="text-xs font-semibold uppercase tracking-widest text-accent dark:text-accent-dark">
+        Education & Certifications
+      </h2>
+      <ul class="mt-4 space-y-4">
+        {
+          education.map((c) => (
+            <li>
+              <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+                <p class="font-semibold text-slate-900 dark:text-slate-100">{c.title}</p>
+                {c.period && (
+                  <span class="text-xs font-medium text-slate-400 dark:text-slate-500">{c.period}</span>
+                )}
+              </div>
+              <p class="text-sm text-slate-600 dark:text-slate-400">{c.org}</p>
+              {c.note && <p class="text-sm italic text-slate-500 dark:text-slate-500">{c.note}</p>}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="mt-12">
+      <ResumeLink variant="solid" />
+    </div>
+  </section>
+</BaseLayout>

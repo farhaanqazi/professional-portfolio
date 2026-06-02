@@ -1,0 +1,81 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const { data, slug } = project;
+
+const statusLabel: Record<typeof data.status, string> = {
+  production: 'Production',
+  prototype: 'Prototype',
+  research: 'Research',
+  archived: 'Archived',
+};
+
+const firstMetric = data.metrics?.[0];
+---
+
+<article
+  class="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 ease-smooth hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-accent-dark/40"
+>
+  <a href={`/projects/${slug}`} class="flex h-full flex-col focus-visible:ring-0">
+    <!-- Thumbnail: explicit aspect ratio prevents layout shift (CLS 0). -->
+    <div class="aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+      <img
+        src={data.thumbnail}
+        alt={`${data.title} thumbnail`}
+        width="640"
+        height="360"
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover transition-transform duration-300 ease-smooth group-hover:scale-[1.02]"
+      />
+    </div>
+
+    <div class="flex flex-1 flex-col p-5">
+      <div class="mb-2 flex items-center gap-2">
+        <span
+          class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[0.7rem] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+        >
+          {statusLabel[data.status]}
+        </span>
+        {
+          firstMetric && (
+            <span class="truncate text-[0.7rem] font-medium text-accent dark:text-accent-dark">
+              {firstMetric.value} {firstMetric.label}
+            </span>
+          )
+        }
+      </div>
+
+      <h3
+        class="text-lg font-semibold tracking-tight text-slate-900 transition-colors group-hover:text-accent dark:text-slate-100 dark:group-hover:text-accent-dark"
+      >
+        {data.title}
+      </h3>
+      <p class="mt-1.5 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        {data.summary}
+      </p>
+
+      <div class="mt-4 flex flex-wrap gap-1.5">
+        {
+          data.stack.slice(0, 4).map((tech) => (
+            <span class="rounded border border-slate-200 px-1.5 py-0.5 text-[0.7rem] text-slate-500 dark:border-slate-700 dark:text-slate-400">
+              {tech}
+            </span>
+          ))
+        }
+      </div>
+
+      <span
+        class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent dark:text-accent-dark"
+      >
+        Read case study
+        <Icon name="arrow-right" class="h-4 w-4 transition-transform duration-200 ease-smooth group-hover:translate-x-0.5" />
+      </span>
+    </div>
+  </a>
+</article>
