@@ -23,13 +23,14 @@ const isActive = (href: string) => (href === '/' ? current === '/' : current.sta
       href="/"
       class="group flex items-center gap-2.5 text-sm font-bold tracking-tight text-slate-100 transition-colors"
     >
-      <span class="grid h-7 w-7 place-items-center rounded-lg border border-white/20 bg-white/[0.06] font-display text-[0.65rem] font-bold gradient-text">
+      <span class="grid h-7 w-7 flex-none place-items-center rounded-lg border border-white/20 bg-white/[0.06] font-display text-[0.65rem] font-bold gradient-text">
         {site.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
       </span>
-      <span class="font-display text-[0.8rem] uppercase tracking-[0.18em] transition-colors group-hover:text-white">{site.name}</span>
+      <span class="whitespace-nowrap font-display text-[0.8rem] uppercase tracking-[0.18em] transition-colors group-hover:text-white">{site.name}</span>
     </a>
 
-    <div class="flex items-center gap-1 sm:gap-2">
+    <!-- Desktop nav (sm and up) -->
+    <div class="hidden items-center gap-1 sm:flex sm:gap-2">
       <ul class="flex items-center gap-1 sm:gap-2">
         {
           nav.map((item) => (
@@ -39,9 +40,7 @@ const isActive = (href: string) => (href === '/' ? current === '/' : current.sta
                 aria-current={isActive(item.href) ? 'page' : undefined}
                 class:list={[
                   'rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors duration-200 ease-smooth',
-                  isActive(item.href)
-                    ? 'text-white'
-                    : 'text-slate-400 hover:text-slate-100',
+                  isActive(item.href) ? 'text-white' : 'text-slate-400 hover:text-slate-100',
                 ]}
               >
                 {item.label}
@@ -50,7 +49,77 @@ const isActive = (href: string) => (href === '/' ? current === '/' : current.sta
           ))
         }
       </ul>
-      <ResumeLink variant="outline" class="ml-1 hidden !px-3.5 !py-1.5 !text-xs sm:inline-flex" />
+      <ResumeLink variant="outline" class="ml-1 !px-3.5 !py-1.5 !text-xs" />
     </div>
+
+    <!-- Mobile hamburger dropdown (below sm) — native <details>, works with no JS -->
+    <details class="menu relative sm:hidden">
+      <summary
+        class="grid h-9 w-9 cursor-pointer place-items-center rounded-lg border border-white/15 bg-white/[0.04] text-slate-200 transition-colors hover:text-white"
+        aria-label="Toggle navigation menu"
+      >
+        <svg class="bars h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        <svg class="close h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18" />
+          <line x1="6" y1="18" x2="18" y2="6" />
+        </svg>
+      </summary>
+
+      <div
+        class="absolute right-0 z-50 mt-2 w-52 origin-top-right rounded-xl border border-white/10 bg-[#0b0b12]/95 p-2 shadow-2xl backdrop-blur-xl"
+      >
+        <ul class="flex flex-col">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  class:list={[
+                    'block rounded-md px-3 py-2.5 text-sm font-medium transition-colors',
+                    isActive(item.href)
+                      ? 'bg-white/[0.07] text-white'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white',
+                  ]}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+          <li class="mt-1 border-t border-white/10 pt-2">
+            <ResumeLink variant="outline" class="w-full justify-center !text-xs" />
+          </li>
+        </ul>
+      </div>
+    </details>
   </nav>
 </header>
+
+<style>
+  /* Remove the default disclosure triangle on the hamburger summary. */
+  .menu summary { list-style: none; }
+  .menu summary::-webkit-details-marker { display: none; }
+  /* Swap bars ↔ close icon based on open state. */
+  .menu .close { display: none; }
+  .menu[open] .bars { display: none; }
+  .menu[open] .close { display: block; }
+</style>
+
+<script is:inline>
+  // Progressive enhancement: close the mobile menu on outside-click / Escape.
+  (function () {
+    var menu = document.querySelector('.menu');
+    if (!menu) return;
+    document.addEventListener('click', function (e) {
+      if (menu.open && !menu.contains(e.target)) menu.open = false;
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') menu.open = false;
+    });
+  })();
+</script>

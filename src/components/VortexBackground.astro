@@ -82,24 +82,25 @@
           float a = atan(uv.y, uv.x);
 
           // Rotation accelerates toward the centre → vortex "suction".
-          float swirl = uTime * 0.10 + 0.45 / (r + 0.22);
+          float swirl = uTime * 0.17 + 0.5 / (r + 0.22);
           a += swirl;
 
           // Sample noise in the (angle, radius) plane; domain-warp it so the
           // tendrils look like fluid smoke instead of a clean geometric spiral.
-          vec2 q = vec2(a * 1.3, r * 2.2 - uTime * 0.08);
+          vec2 q = vec2(a * 1.3, r * 2.2 - uTime * 0.14);
           float n = fbm(q + 0.6 * fbm(q * 0.7));
           n = n * 0.5 + 0.5;
 
           // Brightness concentrates near the core, fades outward.
-          float core   = smoothstep(0.95, 0.0, r);
+          float core   = smoothstep(1.0, 0.0, r);
           float bright = n * core;
 
-          // Monochrome map: deep black → muted silver (kept dim for legibility).
-          vec3 col = mix(vec3(0.015, 0.016, 0.02), vec3(0.34, 0.36, 0.42), bright);
+          // Monochrome map: deep black → silver (bright enough to read as motion,
+          // still dark behind the blurred glass tiles for legibility).
+          vec3 col = mix(vec3(0.02, 0.022, 0.028), vec3(0.5, 0.53, 0.62), bright);
 
-          // Faint bright filaments threading through the eye of the vortex.
-          col += vec3(0.5, 0.52, 0.58) * pow(core, 3.0) * smoothstep(0.55, 0.95, n) * 0.45;
+          // Bright filaments threading through the eye of the vortex.
+          col += vec3(0.66, 0.7, 0.8) * pow(core, 2.6) * smoothstep(0.5, 0.95, n) * 0.7;
 
           // Radial vignette → forces the eye to the centre, darkens corners.
           col *= smoothstep(1.25, 0.15, r);

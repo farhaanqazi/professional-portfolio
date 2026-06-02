@@ -1,0 +1,76 @@
+---
+// ─────────────────────────────────────────────────────────────────────────────
+// Micro-interactions: magnetic primary CTAs + scroll-linked hero/ring parallax.
+//
+// Dependency-free (no GSAP). A single requestAnimationFrame loop drives both
+// effects and only ever writes `transform` / `opacity`, so everything stays on
+// the compositor at 60fps. The whole thing short-circuits under
+// prefers-reduced-motion and on coarse (touch) pointers, leaving a static UI.
+// ─────────────────────────────────────────────────────────────────────────────
+---
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+  if (!prefersReduced) {
+    const lerp = (a: number, b: number, n: number) => a + (b - a) * n;
+
+    // ── Magnetic CTAs + cursor spotlight (fine pointers only) ───────────────
+    type Mag = { el: HTMLElement; cx: number; cy: number; tx: number; ty: number };
+    const mags: Mag[] = [];
+    if (finePointer) {
+      const STRENGTH = 0.55; // fraction of the cursor offset the button follows
+      document.querySelectorAll<HTMLElement>('.btn-primary, .btn-ghost').forEach((el) => {
+        const m: Mag = { el, cx: 0, cy: 0, tx: 0, ty: 0 };
+        el.addEventListener('pointermove', (e) => {
+          const r = el.getBoundingClientRect();
+          m.tx = (e.clientX - (r.left + r.width / 2)) * STRENGTH;
+          m.ty = (e.clientY - (r.top + r.height / 2)) * STRENGTH;
+        });
+        el.addEventListener('pointerleave', () => { m.tx = 0; m.ty = 0; });
+        mags.push(m);
+      });
+
+      // Spotlight: write --mx/--my (%) on whichever tile the cursor is over.
+      document.querySelectorAll<HTMLElement>('.tile').forEach((tile) => {
+        tile.addEventListener('pointermove', (e) => {
+          const r = tile.getBoundingClientRect();
+          tile.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+          tile.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+        });
+      });
+    }
+
+    // ── Scroll-linked hero drift + ring parallax ────────────────────────────
+    const hero = document.querySelector<HTMLElement>('[data-hero-fade]');
+    const rings = document.querySelector<HTMLElement>('.deco-rings');
+    let scrollY = window.scrollY;
+    let lastScroll = -1;
+    window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+
+    const tick = () => {
+      // Magnetic easing — settle to '' when at rest so hover styles stay clean.
+      for (const m of mags) {
+        m.cx = lerp(m.cx, m.tx, 0.18);
+        m.cy = lerp(m.cy, m.ty, 0.18);
+        const atRest = Math.abs(m.cx) < 0.05 && Math.abs(m.cy) < 0.05 && m.tx === 0 && m.ty === 0;
+        m.el.style.transform = atRest ? '' : `translate3d(${m.cx.toFixed(2)}px, ${m.cy.toFixed(2)}px, 0)`;
+      }
+
+      // Scroll work only when the position actually changed.
+      if (scrollY !== lastScroll) {
+        const p = Math.min(scrollY / (window.innerHeight * 0.6), 1); // 0→1 over ~60vh
+        if (hero) {
+          hero.style.transform = p ? `translate3d(0, ${(-26 * p).toFixed(2)}px, 0) scale(${(1 - 0.03 * p).toFixed(4)})` : '';
+          hero.style.opacity = p ? String((1 - 0.45 * p).toFixed(3)) : '';
+        }
+        if (rings) rings.style.transform = `translate3d(0, ${(scrollY * -0.06).toFixed(2)}px, 0)`;
+        lastScroll = scrollY;
+      }
+
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+</script>
