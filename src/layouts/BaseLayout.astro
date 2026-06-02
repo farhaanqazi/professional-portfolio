@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import VortexBackground from '../components/VortexBackground.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -25,7 +26,7 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark scroll-smooth">
   <head>
     <script is:inline>
       document.documentElement.classList.add('js');
@@ -33,7 +34,16 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#050507" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Display (Orbitron) + body (Inter) faces for the sci-fi monochrome theme. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap"
+    />
     <link rel="canonical" href={canonical} />
 
     <title>{pageTitle}</title>
@@ -57,7 +67,12 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href;
     <meta name="twitter:image" content={ogImageUrl} />
   </head>
   <body class="flex min-h-screen flex-col">
-    <div class="bg-decor" aria-hidden="true"></div>
+    <VortexBackground />
+    <div class="deco-rings" aria-hidden="true">
+      <span class="ring r1"></span>
+      <span class="ring r2"></span>
+      <span class="ring r3"></span>
+    </div>
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-[60] focus:rounded-md focus:bg-accent focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"

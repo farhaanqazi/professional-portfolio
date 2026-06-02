@@ -10,9 +10,9 @@ import { site } from '../data/site';
 const projectCount = (await getCollection('projects')).length;
 
 const capabilities = [
-  { icon: 'chart' as const, title: 'Executive dashboards', desc: 'Power BI · DAX · time-series built for leadership.', grad: '#0ea5e9,#6366f1' },
-  { icon: 'bolt' as const, title: 'Automated reporting', desc: 'Python pipelines + CI/CD on GitHub Actions & AWS.', grad: '#f97316,#ec4899' },
-  { icon: 'database' as const, title: 'Contract-governed analytics', desc: 'Validated numbers, never invented by the model.', grad: '#6366f1,#a855f7' },
+  { icon: 'chart' as const, title: 'Executive dashboards', desc: 'Power BI · DAX · time-series built for leadership.' },
+  { icon: 'bolt' as const, title: 'Automated reporting', desc: 'Python pipelines + CI/CD on GitHub Actions & AWS.' },
+  { icon: 'database' as const, title: 'Contract-governed analytics', desc: 'Validated numbers, never invented by the model.' },
 ];
 
 const skills = ['Power BI · DAX', 'SQL', 'Python', 'Advanced Excel', 'CI/CD', 'AWS'];
@@ -23,10 +23,9 @@ const links = [
   { href: '/story', eyebrow: 'Personal', title: 'The long way here', desc: 'From Kashmir, through banking and a master’s, to the work I couldn’t put down.' },
 ];
 
-const tile =
-  'group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent/10 dark:border-white/10 dark:bg-white/[0.03] dark:hover:shadow-accent-dark/20';
+const tile = 'group tile';
 const badge =
-  'grid h-10 w-10 flex-none place-items-center rounded-xl text-white shadow-lg';
+  'grid h-10 w-10 flex-none place-items-center rounded-xl border border-white/15 bg-white/[0.05] text-slate-100';
 ---
 
 <BaseLayout>
@@ -37,24 +36,24 @@ const badge =
         <div>
           <div class="flex items-center gap-4">
             <div
-              class="grid h-14 w-14 flex-none place-items-center rounded-2xl text-lg font-bold text-white shadow-lg"
-              style="background-image:linear-gradient(135deg,var(--accent),var(--accent-2))"
+              class="grid h-14 w-14 flex-none place-items-center rounded-2xl border border-white/20 bg-white/[0.06] font-display text-lg font-bold gradient-text"
+              style="box-shadow:0 0 30px -10px rgb(180 200 255 / 0.35)"
             >
               {site.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
             </div>
             <div>
-              <p class="text-xs font-semibold uppercase tracking-widest text-accent dark:text-accent-dark">
+              <p class="eyebrow text-slate-300">
                 {site.role}
               </p>
-              <h1 class="mt-0.5 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
+              <h1 class="mt-1 font-display text-xl font-bold uppercase tracking-[0.12em] text-slate-50 sm:text-2xl">
                 {site.name.split(' ')[0]} <span class="gradient-text">{site.name.split(' ').slice(1).join(' ')}</span>
               </h1>
             </div>
           </div>
-          <p class="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-slate-600 dark:text-slate-300">
+          <p class="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-slate-300">
             {site.tagline}
           </p>
-          <p class="mt-3 max-w-xl text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          <p class="mt-3 max-w-xl text-sm leading-relaxed text-slate-400">
             {site.valueStatement}
           </p>
         </div>
@@ -66,37 +65,37 @@ const badge =
 
       <!-- ── Stat tiles ──────────────────────────────────────────────── -->
       <div class={`reveal flex flex-col items-center justify-center p-5 text-center ${tile}`}>
-        <span class="stat-bracket gradient-text text-4xl font-bold tracking-tight">8+</span>
-        <span class="mt-2 text-xs text-slate-500 dark:text-slate-400">Years cross-industry</span>
+        <span class="stat-bracket gradient-text font-display text-4xl font-bold tracking-tight">8+</span>
+        <span class="mt-2 text-xs text-slate-400">Years cross-industry</span>
       </div>
       <a
         href="/projects"
         class={`reveal flex flex-col items-center justify-center p-5 text-center ${tile}`}
       >
-        <span class="stat-bracket gradient-text text-4xl font-bold tracking-tight">{projectCount}</span>
-        <span class="mt-2 text-xs text-slate-500 dark:text-slate-400">Projects with proof</span>
+        <span class="stat-bracket gradient-text font-display text-4xl font-bold tracking-tight">{projectCount}</span>
+        <span class="mt-2 text-xs text-slate-400">Projects with proof</span>
       </a>
 
       <!-- ── Capability tiles with icon badges ───────────────────────── -->
       {
         capabilities.map((c) => (
           <div class={`reveal flex flex-col p-5 ${tile}`}>
-            <span class={badge} style={`background-image:linear-gradient(135deg, ${c.grad})`}>
+            <span class={badge}>
               <Icon name={c.icon} class="h-5 w-5" />
             </span>
-            <h2 class="mt-3 text-sm font-semibold text-slate-900 dark:text-slate-100">{c.title}</h2>
-            <p class="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">{c.desc}</p>
+            <h2 class="mt-3 text-sm font-semibold text-slate-100">{c.title}</h2>
+            <p class="mt-1 text-xs leading-relaxed text-slate-400">{c.desc}</p>
           </div>
         ))
       }
 
       <!-- ── Stack tile ──────────────────────────────────────────────── -->
       <div class={`reveal flex flex-col justify-center p-5 ${tile}`}>
-        <p class="text-xs font-semibold uppercase tracking-widest text-accent dark:text-accent-dark">Stack</p>
+        <p class="eyebrow">Stack</p>
         <div class="mt-3 flex flex-wrap gap-1.5">
           {
             skills.map((s) => (
-              <span class="rounded-md border border-slate-200 px-2 py-0.5 text-[0.72rem] text-slate-600 dark:border-white/10 dark:text-slate-300">
+              <span class="rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[0.72rem] text-slate-300">
                 {s}
               </span>
             ))
@@ -112,15 +111,15 @@ const badge =
             class={`reveal flex flex-col justify-between p-6 sm:col-span-2 lg:col-span-2 ${tile}`}
           >
             <div>
-              <p class="text-xs font-semibold uppercase tracking-widest text-accent dark:text-accent-dark">
+              <p class="eyebrow">
                 {l.eyebrow}
               </p>
-              <h2 class="mt-1 text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+              <h2 class="mt-1.5 text-lg font-semibold tracking-tight text-slate-100">
                 {l.title}
               </h2>
-              <p class="mt-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{l.desc}</p>
+              <p class="mt-1 text-sm leading-relaxed text-slate-400">{l.desc}</p>
             </div>
-            <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-accent dark:text-accent-dark">
+            <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-slate-200 transition-colors group-hover:text-white">
               Explore
               <Icon name="arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </span>

@@ -10,12 +10,12 @@ const { eyebrow, title, class: className = '' } = Astro.props;
 <div class={className}>
   {
     eyebrow && (
-      <p class="mb-1 text-xs font-semibold uppercase tracking-widest text-accent dark:text-accent-dark">
+      <p class="eyebrow mb-2">
         {eyebrow}
       </p>
     )
   }
-  <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+  <h2 class="font-display text-2xl font-bold uppercase tracking-[0.08em] text-slate-50 sm:text-3xl">
     {title}
   </h2>
 </div>

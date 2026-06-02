@@ -16,17 +16,17 @@ const isActive = (href: string) => (href === '/' ? current === '/' : current.sta
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-[#070711]/70"
+  class="sticky top-0 z-50 border-b border-white/10 bg-[#050507]/70 backdrop-blur-xl"
 >
   <nav class="container-content flex h-14 items-center justify-between" aria-label="Primary">
     <a
       href="/"
-      class="group flex items-center gap-2 text-sm font-bold tracking-tight text-slate-900 transition-colors dark:text-slate-100"
+      class="group flex items-center gap-2.5 text-sm font-bold tracking-tight text-slate-100 transition-colors"
     >
-      <span class="grid h-7 w-7 place-items-center rounded-lg text-xs font-bold text-white" style="background-image:linear-gradient(135deg,var(--accent),var(--accent-2))">
+      <span class="grid h-7 w-7 place-items-center rounded-lg border border-white/20 bg-white/[0.06] font-display text-[0.65rem] font-bold gradient-text">
         {site.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
       </span>
-      <span class="transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{site.name}</span>
+      <span class="font-display text-[0.8rem] uppercase tracking-[0.18em] transition-colors group-hover:text-white">{site.name}</span>
     </a>
 
     <div class="flex items-center gap-1 sm:gap-2">
@@ -40,8 +40,8 @@ const isActive = (href: string) => (href === '/' ? current === '/' : current.sta
                 class:list={[
                   'rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors duration-200 ease-smooth',
                   isActive(item.href)
-                    ? 'text-accent dark:text-accent-dark'
-                    : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100',
+                    ? 'text-white'
+                    : 'text-slate-400 hover:text-slate-100',
                 ]}
               >
                 {item.label}
