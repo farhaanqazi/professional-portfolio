@@ -1,12 +1,29 @@
 ---
 // Minimal inline SVG icons (Lucide-derived paths). SVG, never emoji — per design checklist.
 interface Props {
-  name: 'github' | 'linkedin' | 'mail' | 'file' | 'arrow-right' | 'arrow-up-right' | 'external';
+  name:
+    | 'github'
+    | 'linkedin'
+    | 'mail'
+    | 'file'
+    | 'arrow-right'
+    | 'arrow-up-right'
+    | 'external'
+    | 'sparkles'
+    | 'chart'
+    | 'bolt'
+    | 'database';
   class?: string;
 }
 const { name, class: className = 'h-5 w-5' } = Astro.props;
 
 const paths: Record<Props['name'], string> = {
+  sparkles:
+    '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/>',
+  chart: '<path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="13" y="7" width="3" height="10"/>',
+  bolt: '<path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>',
+  database:
+    '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/>',
   github:
     '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>',
   linkedin:

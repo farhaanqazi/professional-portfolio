@@ -22,4 +22,5 @@ Thumbs.db
 
 # local scratch (downloaded skill repos, scratch DBs, etc.)
 _local/
+_diag/
 plan.md

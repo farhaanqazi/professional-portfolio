@@ -4,10 +4,15 @@
 
 @layer base {
   :root {
-    color-scheme: light dark;
-    --accent: #6366f1;
-    --accent-2: #a855f7;
-    --accent-3: #ec4899;
+    color-scheme: dark;
+    /* Monochrome silver "accent" ramp — white → silver → muted steel.
+       Hue is intentionally absent: this is a black-to-silver palette. */
+    --accent: #f3f6fc;
+    --accent-2: #aab3c5;
+    --accent-3: #6b7385;
+    /* Surface + line tokens for the dark glass UI. */
+    --bg: #050507;
+    --line: rgb(255 255 255 / 0.1);
   }
 
   html {
@@ -16,80 +21,89 @@
   }
 
   body {
-    @apply bg-white text-slate-800 antialiased;
-    @apply dark:bg-[#070711] dark:text-slate-200;
+    @apply bg-[#050507] text-slate-300 antialiased;
     font-feature-settings: 'cv11', 'ss01';
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    /* Justify multi-line body copy site-wide; single-line UI is unaffected.
+       Hyphenation keeps justified columns from opening ugly word-gaps. */
+    text-align: justify;
+    text-justify: inter-word;
+    -webkit-hyphens: auto;
+    hyphens: auto;
   }
 
   ::selection {
-    @apply bg-accent/25 dark:bg-accent-dark/30;
+    @apply bg-white/20 text-white;
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-white;
-    @apply dark:ring-accent-dark dark:ring-offset-[#070711];
+    @apply outline-none ring-2 ring-accent ring-offset-2;
+    --tw-ring-offset-color: #050507;
     border-radius: 4px;
   }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-slate-300 dark:bg-slate-700;
-  }
-  ::-webkit-scrollbar-thumb:hover { @apply bg-accent/60 dark:bg-accent-dark/60; }
+  ::-webkit-scrollbar-thumb { @apply rounded-full bg-white/15; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-white/30; }
 }
 
-/* ── Decorative background: aurora + grid ───────────────────────────────── */
 @layer components {
-  .bg-decor {
+  /* ── WebGL vortex canvas ──────────────────────────────────────────────
+     Fixed, full-viewport, behind everything. The component paints it. */
+  .vortex-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    /* CSS fallback if WebGL never initialises (kept dark + centred). */
+    background:
+      radial-gradient(60% 60% at 50% 45%, #15161d 0%, #0a0a0e 45%, #050507 100%);
+  }
+
+  /* ── Decorative concentric rings (HUD parallax overlay) ───────────────
+     Thin dashed circles that rotate slowly in opposite directions. They sit
+     above the canvas but below content, faded so they never fight the text. */
+  .deco-rings {
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
+    display: grid;
+    place-items: center;
     overflow: hidden;
+    /* Fade the rings out toward the edges so corners stay clean. */
+    -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 30%, transparent 72%);
+    mask-image: radial-gradient(circle at 50% 45%, #000 30%, transparent 72%);
   }
-  .bg-decor::before {
-    content: '';
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    width: 80rem;
-    height: 50rem;
-    transform: translateX(-50%);
-    background:
-      radial-gradient(40% 50% at 30% 30%, color-mix(in oklab, var(--accent) 45%, transparent), transparent 70%),
-      radial-gradient(40% 50% at 70% 40%, color-mix(in oklab, var(--accent-2) 40%, transparent), transparent 70%),
-      radial-gradient(35% 45% at 50% 70%, color-mix(in oklab, var(--accent-3) 30%, transparent), transparent 70%);
-    opacity: 0.18;
-    filter: blur(40px);
-    animation: aurora 18s ease-in-out infinite alternate;
+  .deco-rings .ring {
+    grid-area: 1 / 1;
+    border-radius: 50%;
+    border: 1px dashed rgb(255 255 255 / 0.12);
   }
-  .dark .bg-decor::before { opacity: 0.3; }
-  .bg-decor::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(to right, color-mix(in oklab, currentColor 100%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklab, currentColor 100%, transparent) 1px, transparent 1px);
-    background-size: 56px 56px;
-    color: rgb(2 6 23 / 0.04);
-    -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 40%, transparent 75%);
-    mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 40%, transparent 75%);
-  }
-  .dark .bg-decor::after { color: rgb(255 255 255 / 0.05); }
+  .deco-rings .ring.r1 { width: 30rem; height: 30rem; animation: ring-spin 90s linear infinite; }
+  .deco-rings .ring.r2 { width: 46rem; height: 46rem; border-style: dotted; animation: ring-spin 140s linear infinite reverse; }
+  .deco-rings .ring.r3 { width: 64rem; height: 64rem; border-color: rgb(255 255 255 / 0.07); animation: ring-spin 200s linear infinite; }
 
   /* ── Layout helpers ─────────────────────────────────────────────────── */
   .container-content {
     @apply mx-auto w-full max-w-content px-5 sm:px-8;
   }
 
-  /* ── Gradient text ──────────────────────────────────────────────────── */
+  /* ── Display eyebrow (small uppercase sci-fi label) ─────────────────── */
+  .eyebrow {
+    @apply font-display text-[0.7rem] font-semibold uppercase text-slate-400;
+    letter-spacing: 0.28em;
+  }
+
+  /* ── Gradient text — white → silver, monochrome ─────────────────────── */
   .gradient-text {
-    background-image: linear-gradient(110deg, var(--accent), var(--accent-2) 45%, var(--accent-3));
+    background-image: linear-gradient(110deg, #ffffff, var(--accent-2) 55%, var(--accent-3));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -97,50 +111,60 @@
 
   /* ── Glass surface ──────────────────────────────────────────────────── */
   .glass {
-    @apply border border-slate-200/70 bg-white/70 backdrop-blur-xl;
-    @apply dark:border-white/10 dark:bg-white/[0.03];
+    @apply border border-white/10 bg-white/[0.03] backdrop-blur-xl;
   }
 
-  /* ── Buttons / links ────────────────────────────────────────────────── */
+  /* ── Bento tile — shared surface for the grid cards ─────────────────── */
+  .tile {
+    @apply relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-xl;
+    @apply transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)];
+  }
+  .tile:hover {
+    @apply -translate-y-1 border-white/25 bg-white/[0.05];
+    box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(255 255 255 / 0.04),
+      0 0 40px -12px rgb(180 200 255 / 0.12);
+  }
+
+  /* ── Buttons — "HUD" pills ──────────────────────────────────────────── */
   .btn-primary {
-    @apply relative inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white;
-    background-image: linear-gradient(110deg, var(--accent), var(--accent-2));
-    box-shadow: 0 8px 24px -8px color-mix(in oklab, var(--accent) 70%, transparent);
+    @apply relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold;
+    color: #06060a;
+    background-image: linear-gradient(180deg, #f6f8fd, #c6cedd);
+    border: 1px solid rgb(255 255 255 / 0.6);
+    box-shadow: 0 8px 30px -10px rgb(180 200 255 / 0.4), inset 0 1px 0 rgb(255 255 255 / 0.7);
+    letter-spacing: 0.01em;
     transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
   }
   .btn-primary:hover {
     transform: translateY(-2px);
-    filter: brightness(1.08);
-    box-shadow: 0 14px 34px -8px color-mix(in oklab, var(--accent) 75%, transparent);
+    filter: brightness(1.06);
+    box-shadow: 0 16px 44px -12px rgb(190 210 255 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.8);
   }
   .btn-ghost {
-    @apply inline-flex items-center gap-2 rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-800 transition-all duration-200;
-    @apply hover:-translate-y-0.5 hover:border-accent hover:text-accent;
-    @apply dark:border-white/15 dark:text-slate-200 dark:hover:border-accent-dark dark:hover:text-accent-dark;
+    @apply inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all duration-200;
+    @apply hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/5 hover:text-white;
   }
   .link-accent {
-    @apply text-accent decoration-accent/40 underline-offset-4 transition-colors duration-200 hover:decoration-accent;
-    @apply dark:text-accent-dark dark:decoration-accent-dark/40 dark:hover:decoration-accent-dark;
+    @apply text-slate-100 decoration-white/30 underline-offset-4 transition-colors duration-200 hover:text-white hover:decoration-white;
   }
 
   /* ── Long-form reading typography ───────────────────────────────────── */
   .prose-reading {
-    @apply max-w-prose text-[1.0625rem] leading-relaxed text-slate-700 dark:text-slate-300;
+    @apply max-w-prose text-[1.0625rem] leading-relaxed text-slate-300;
   }
-  .prose-reading h2 { @apply mt-10 mb-3 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100; }
-  .prose-reading h3 { @apply mt-8 mb-2 text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100; }
+  .prose-reading h2 { @apply mt-10 mb-3 text-xl font-semibold tracking-tight text-slate-100; }
+  .prose-reading h3 { @apply mt-8 mb-2 text-lg font-semibold tracking-tight text-slate-100; }
   .prose-reading p { @apply my-4; }
-  .prose-reading ul { @apply my-4 list-disc space-y-1.5 pl-5 marker:text-accent dark:marker:text-accent-dark; }
+  .prose-reading ul { @apply my-4 list-disc space-y-1.5 pl-5 marker:text-slate-500; }
   .prose-reading a { @apply link-accent; }
-  .prose-reading code { @apply rounded bg-slate-100 px-1.5 py-0.5 text-[0.875em] dark:bg-white/10; }
+  .prose-reading code { @apply rounded bg-white/10 px-1.5 py-0.5 text-[0.875em]; }
   .prose-reading table { @apply my-5 w-full text-left text-sm; }
-  .prose-reading th { @apply border-b border-slate-300 pb-2 font-semibold dark:border-white/15; }
-  .prose-reading td { @apply border-b border-slate-200 py-2 align-top dark:border-white/10; }
+  .prose-reading th { @apply border-b border-white/15 pb-2 font-semibold; }
+  .prose-reading td { @apply border-b border-white/10 py-2 align-top; }
   .prose-reading blockquote {
-    @apply my-5 rounded-r-lg border-l-2 border-accent/60 bg-slate-50 py-2 pl-4 italic text-slate-600;
-    @apply dark:border-accent-dark/60 dark:bg-white/[0.03] dark:text-slate-400;
+    @apply my-5 rounded-r-lg border-l-2 border-white/30 bg-white/[0.03] py-2 pl-4 italic text-slate-400;
   }
-  .prose-reading pre { @apply my-5 overflow-x-auto rounded-xl bg-slate-900 p-4 text-sm text-slate-100 dark:bg-black/40; }
+  .prose-reading pre { @apply my-5 overflow-x-auto rounded-xl bg-black/50 p-4 text-sm text-slate-100; }
 }
 
 /* ── Motion ─────────────────────────────────────────────────────────────── */
@@ -158,9 +182,9 @@
   .animate-fade { animation: fade 1s ease both; }
 }
 
-@keyframes aurora {
-  0%   { transform: translateX(-50%) translateY(0) rotate(0deg) scale(1); }
-  100% { transform: translateX(-50%) translateY(20px) rotate(8deg) scale(1.1); }
+@keyframes ring-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 @keyframes rise {
   from { opacity: 0; transform: translateY(24px); }
@@ -174,7 +198,7 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1 !important; transform: none !important; }
-  .bg-decor::before { animation: none !important; }
+  .deco-rings .ring { animation: none !important; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

@@ -1,18 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}'],
-  // 'media' honors the OS light/dark preference with zero client JS — no toggle, no FOUC.
-  darkMode: 'media',
+  // 'class' — the redesign is a single, deliberate dark monochrome theme.
+  // `<html class="dark">` is hardcoded in BaseLayout; no OS toggle, no FOUC.
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // Single restrained accent (indigo). Brighter shade for dark mode legibility.
+        // Monochrome "accent" = silver/white. Brightness, not hue, is the
+        // differentiator on the black vortex backdrop.
         accent: {
-          DEFAULT: '#4f46e5',
-          dark: '#818cf8',
+          DEFAULT: '#e6ebf4',
+          dark: '#e6ebf4',
         },
       },
       fontFamily: {
+        // Geometric sci-fi display face for the wordmark, hero, stats, and
+        // short section titles. Body copy stays on Inter for readability.
+        display: ['Orbitron', 'Inter', 'system-ui', 'sans-serif'],
         sans: [
           'Inter',
           'system-ui',
